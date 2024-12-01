@@ -4,6 +4,7 @@
 #include <HTTPClient.h>
 #include <WiFi.h>
 #include <WiFiClientSecure.h>
+#include "Fonts/FreeMonoBold24pt7b.h"
 
 #include "credentials.h"
 
@@ -28,6 +29,7 @@ static String accessToken;
 static void displayStatus(String text)
 {
     // display.fillRect(0, 680, E_INK_WIDTH, 40, 7);
+    display.setFont();
     display.setTextSize(4);
     display.setCursor(10, 680);
     display.print(text);
@@ -45,6 +47,7 @@ static void displayGrid()
     if (!enableGrid)
         return;
 
+    display.setFont();
     display.setTextSize(2);
     for (int x = 0; x < E_INK_WIDTH; x += 10) {
         display.drawFastVLine(x, 0, E_INK_HEIGHT, 6);
@@ -233,6 +236,7 @@ static void updateAndRedrawSchedule()
     display.clearDisplay();
 
     // Update the time
+    display.setFont();
     display.setCursor(1080, 40);
     display.setTextSize(6);
     print2Digits(currentHours);
@@ -244,7 +248,8 @@ static void updateAndRedrawSchedule()
     int16_t y = 100;
     const int16_t y_spacing = 70;
 
-    display.setTextSize(6);
+    display.setFont(&FreeMonoBold24pt7b);
+    display.setTextSize(1);
 
     for (JsonObject o : results) {
         String depart = o["estimatedOtherwisePlannedTime"];

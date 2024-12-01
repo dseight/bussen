@@ -273,6 +273,11 @@ static void updateSchedule()
         direction.replace("Ö", "\x99");
         direction.replace("ö", "\x94");
 
+        if (o["isCancelled"].as<bool>())
+            display.setTextColor(5, 7);
+        else
+            display.setTextColor(0, 7);
+
         display.setCursor(x, y);
         display.print(departTime);
         display.print(' ');

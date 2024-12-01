@@ -261,8 +261,8 @@ static void updateSchedule()
 
         String line = o["serviceJourney"]["line"]["shortName"];
 
-        // String occupancy = o["occupancy"]["level"][0];
-        // occupancy.toUpperCase();
+        String occupancy = o["occupancy"]["level"];
+        occupancy.toUpperCase();
 
         String direction = o["serviceJourney"]["directionDetails"]["shortDirection"];
         direction.replace("Å", "\x8f");
@@ -282,8 +282,8 @@ static void updateSchedule()
         display.print(' ');
         display.print(line);
         display.print(' ');
-        // display.print(occupancy);
-        // display.print(' ');
+        display.print(occupancy.charAt(0));
+        display.print(' ');
         display.print(direction);
 
         y += y_spacing;

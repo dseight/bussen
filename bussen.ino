@@ -5,12 +5,9 @@
 #include <WiFi.h>
 #include <WiFiClientSecure.h>
 
-static const char *wlanSSID = "";
-static const char *wlanPass = "";
+#include "credentials.h"
 
 #define API_HOST "https://ext-api.vasttrafik.se"
-#define API_KEY "<insert-your-api-key-here>"
-#define AREA_CODE "<insert-numeric-stop-area-code>"
 
 // Draw a grid for easier visual elements alignment
 static const bool enableGrid = false;

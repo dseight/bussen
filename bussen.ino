@@ -264,7 +264,7 @@ static void updateSchedule()
         // String occupancy = o["occupancy"]["level"][0];
         // occupancy.toUpperCase();
 
-        String direction = o["serviceJourney"]["direction"];
+        String direction = o["serviceJourney"]["directionDetails"]["shortDirection"];
         direction.replace("Å", "\x8f");
         direction.replace("å", "\x86");
         direction.replace("Ä", "\x8e");

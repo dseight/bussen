@@ -22,7 +22,6 @@ static Inkplate display(INKPLATE_3BIT);
 static NTPClient ntpTime(ntpudp, "1.europe.pool.ntp.org", 0, 60 * 60 * 1000);
 
 static bool needsUpdate = false;
-static int partialUpdates = 0;
 
 static String statusMessage;
 static String accessToken;
@@ -353,15 +352,6 @@ void loop()
     displayStatus(statusMessage);
 
     if (needsUpdate) {
-        // if (partialUpdates > 3) {
-        //     display.display();
-        //     partialUpdates = 0;
-        // } else {
-        //     Serial.print("Partial update ");
-        //     Serial.println(partialUpdates);
-        //     display.partialUpdate();
-        //     partialUpdates++;
-        // }
         display.display();
         needsUpdate = false;
     }

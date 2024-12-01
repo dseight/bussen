@@ -317,10 +317,13 @@ void setup()
     display.display();
 
     ntpTime.begin();
-    ntpTime.update();
-    Serial.println("NTP Updated");
 
-    display.rtcSetEpoch(ntpTime.getEpochTime());
+    if (ntpTime.update()) {
+        Serial.println("NTP Updated");
+        display.rtcSetEpoch(ntpTime.getEpochTime());
+    } else {
+        Serial.println("NTP Update failed");
+    }
 
     // Use https but don't use a certificate
     client.setInsecure();

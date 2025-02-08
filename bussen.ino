@@ -18,6 +18,8 @@ static HTTPClient http;
 static Inkplate display(INKPLATE_3BIT);
 static NTPClient ntpTime(ntpudp, "1.europe.pool.ntp.org", 3600, 60 * 60 * 1000);
 
+static uint8_t currentHours = -1;
+static uint8_t currentMinutes = -1;
 static bool needsUpdate = false;
 
 static String statusMessage;
@@ -146,22 +148,16 @@ static void updateTime()
 
     display.rtcGetRtcData();
 
-    uint8_t minutes = display.rtcGetMinute();
-    uint8_t hours = display.rtcGetHour();
+    currentHours = display.rtcGetHour();
+    currentMinutes = display.rtcGetMinute();
 
-    if (minutes != oldMinutes) {
-        oldMinutes = minutes;
+    if (currentMinutes != oldMinutes) {
+        oldMinutes = currentMinutes;
         needsUpdate = true;
-    } else if (hours != oldHours) {
-        oldHours = hours;
+    } else if (currentHours != oldHours) {
+        oldHours = currentHours;
         needsUpdate = true;
     }
-
-    display.setCursor(1080, 40);
-    display.setTextSize(6);
-    print2Digits(hours);
-    display.print(':');
-    print2Digits(minutes);
 }
 
 static void requestApiToken()
@@ -194,16 +190,8 @@ static void requestApiToken()
     Serial.println(accessToken);
 }
 
-static void updateSchedule()
+static void updateAndRedrawSchedule()
 {
-    static uint8_t oldMinutes = -1;
-    uint8_t minutes = display.rtcGetMinute();
-
-    if (minutes == oldMinutes)
-        return;
-
-    oldMinutes = minutes;
-
     http.begin(client, API_HOST "/pr/v4/stop-areas/" AREA_CODE "/departures"
                                 "?timeSpanInMinutes=60"
                                 "&maxDeparturesPerLineAndDirection=4"
@@ -241,6 +229,17 @@ static void updateSchedule()
     Serial.print("results.size(): ");
     Serial.println(results.size());
 
+    // Redraw the display contents
+    display.clearDisplay();
+
+    // Update the time
+    display.setCursor(1080, 40);
+    display.setTextSize(6);
+    print2Digits(currentHours);
+    display.print(':');
+    print2Digits(currentMinutes);
+
+    // Update the tavla
     const int16_t x = 30;
     int16_t y = 100;
     const int16_t y_spacing = 70;
@@ -285,8 +284,6 @@ static void updateSchedule()
 
         y += y_spacing;
     }
-
-    needsUpdate = true;
 }
 
 void setup()
@@ -334,17 +331,18 @@ void setup()
 
 void loop()
 {
-    display.clearDisplay();
-
     uint8_t wifiStatus = WiFi.status();
 
-    displayGrid();
+    // displayGrid();  // uncomment when modifying the layout
     updateWifiStatus(wifiStatus);
-    updateTime();
+    updateTime();  // updates "needsUpdate"
 
     // Don't try updating the schedule if connections is lost
-    if (wifiStatus == WL_CONNECTED)
-        updateSchedule();
+    if (wifiStatus == WL_CONNECTED) {
+        if (needsUpdate) {
+            updateAndRedrawSchedule();
+        }
+    }
 
     displayStatus(statusMessage);
 

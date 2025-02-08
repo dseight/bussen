@@ -28,8 +28,8 @@ static String accessToken;
 static void displayStatus(String text)
 {
     // display.fillRect(0, 680, E_INK_WIDTH, 40, 7);
-    display.setTextSize(2);
-    display.setCursor(10, 700);
+    display.setTextSize(4);
+    display.setCursor(10, 680);
     display.print(text);
 }
 

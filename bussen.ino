@@ -4,9 +4,19 @@
 #include <HTTPClient.h>
 #include <WiFi.h>
 #include <WiFiClientSecure.h>
-#include "Fonts/FreeMonoBold24pt7b.h"
+#include "font.h"
 
 #include "credentials.h"
+
+#define DISP_TIME_COORD_X 1080
+#define DISP_TIME_COORD_Y 70
+#define DISP_DEPART_COORD_X 30
+#define DISP_DEPART_COORD_Y 130
+#define DISP_DEPART_SPACING_Y 70
+#define DISP_STATUS_COORD_X 10
+#define DISP_STATUS_COORD_Y 700
+
+#define FONT_NAME JetBrainsMono_Regular28pt8b
 
 #define API_HOST "https://ext-api.vasttrafik.se"
 
@@ -29,9 +39,8 @@ static String accessToken;
 static void displayStatus(String text)
 {
     // display.fillRect(0, 680, E_INK_WIDTH, 40, 7);
-    display.setFont();
-    display.setTextSize(4);
-    display.setCursor(10, 680);
+    display.setTextSize(1);
+    display.setCursor(DISP_STATUS_COORD_X, DISP_STATUS_COORD_Y);
     display.print(text);
 }
 
@@ -47,7 +56,6 @@ static void displayGrid()
     if (!enableGrid)
         return;
 
-    display.setFont();
     display.setTextSize(2);
     for (int x = 0; x < E_INK_WIDTH; x += 10) {
         display.drawFastVLine(x, 0, E_INK_HEIGHT, 6);
@@ -236,19 +244,17 @@ static void updateAndRedrawSchedule()
     display.clearDisplay();
 
     // Update the time
-    display.setFont();
-    display.setCursor(1080, 40);
-    display.setTextSize(6);
+    display.setCursor(DISP_TIME_COORD_X, DISP_TIME_COORD_Y);
+    display.setTextSize(1);
     print2Digits(currentHours);
     display.print(':');
     print2Digits(currentMinutes);
 
     // Update the tavla
-    const int16_t x = 30;
-    int16_t y = 100;
-    const int16_t y_spacing = 70;
+    const int16_t x = DISP_DEPART_COORD_X;
+    int16_t y = DISP_DEPART_COORD_Y;
+    const int16_t y_spacing = DISP_DEPART_SPACING_Y;
 
-    display.setFont(&FreeMonoBold24pt7b);
     display.setTextSize(1);
 
     for (JsonObject o : results) {
@@ -266,12 +272,12 @@ static void updateAndRedrawSchedule()
         occupancy.toUpperCase();
 
         String direction = o["serviceJourney"]["directionDetails"]["shortDirection"];
-        direction.replace("Å", "\x8f");
-        direction.replace("å", "\x86");
-        direction.replace("Ä", "\x8e");
-        direction.replace("ä", "\x84");
-        direction.replace("Ö", "\x99");
-        direction.replace("ö", "\x94");
+        direction.replace("Å", "\xc5");
+        direction.replace("å", "\xe5");
+        direction.replace("Ä", "\xc4");
+        direction.replace("ä", "\xe4");
+        direction.replace("Ö", "\xd6");
+        direction.replace("ö", "\xf6");
 
         if (o["isCancelled"].as<bool>())
             display.setTextColor(5, 7);
@@ -297,6 +303,7 @@ void setup()
 
     display.begin();        // Init library (you should call this function ONLY ONCE)
     display.clearDisplay(); // Clear any data that may have been in (software) frame buffer.
+    display.setFont(&FONT_NAME);
 
     display.setTextColor(0, 7);
 

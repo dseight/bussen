@@ -16,7 +16,7 @@ static WiFiClientSecure client;
 static WiFiUDP ntpudp;
 static HTTPClient http;
 static Inkplate display(INKPLATE_3BIT);
-static NTPClient ntpTime(ntpudp, "1.europe.pool.ntp.org", 0, 60 * 60 * 1000);
+static NTPClient ntpTime(ntpudp, "1.europe.pool.ntp.org", 3600, 60 * 60 * 1000);
 
 static bool needsUpdate = false;
 

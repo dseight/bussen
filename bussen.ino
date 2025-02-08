@@ -207,8 +207,7 @@ static void updateAndRedrawSchedule()
                                 "?timeSpanInMinutes=60"
                                 "&maxDeparturesPerLineAndDirection=4"
                                 "&limit=10"
-                                "&offset=0"
-                                "&includeOccupancy=true");
+                                "&offset=0");
     http.addHeader("Authorization", String("Bearer ") + accessToken);
 
     int httpCode = http.GET();
@@ -268,8 +267,7 @@ static void updateAndRedrawSchedule()
 
         String line = o["serviceJourney"]["line"]["shortName"];
 
-        String occupancy = o["occupancy"]["level"];
-        occupancy.toUpperCase();
+        String platform = o["stopPoint"]["platform"];
 
         String direction = o["serviceJourney"]["directionDetails"]["shortDirection"];
         direction.replace("Å", "\xc5");
@@ -289,7 +287,7 @@ static void updateAndRedrawSchedule()
         display.print(' ');
         display.print(line);
         display.print(' ');
-        display.print(occupancy.charAt(0));
+        display.print(platform);
         display.print(' ');
         display.print(direction);
 

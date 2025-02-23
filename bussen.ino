@@ -214,6 +214,9 @@ static void updateAndRedrawSchedule()
 
     if (httpCode < 0 || httpCode != 200) {
         updateHttpStatus(httpCode);
+        if ((httpCode >= 400) && (httpCode < 500)) {
+            requestApiToken();
+        }
         return;
     }
 

@@ -1,8 +1,14 @@
 # bussen
 
-Made for Inkplate 5 rev2.
+Shows upcoming departures from a given bus stop in Västtrafik's service area. Made for Inkplate 5 rev2.
 
-Before running, fill in:
+Uses Västtrafik's [Planera Resa v4 API](https://developer.vasttrafik.se/apis/13/v4).
+
+![bussen in the flesh](bussen.jpg)
+
+Copy `credentials_template.h` to `credentials.h` and modify before use.
+
+Fill in:
 - `wlanSSID`
 - `wlanPass`
 - `API_KEY`

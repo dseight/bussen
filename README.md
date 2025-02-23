@@ -6,6 +6,8 @@ Uses Västtrafik's [Planera Resa v4 API](https://developer.vasttrafik.se/apis/13
 
 ![bussen in the flesh](bussen.jpg)
 
+The case on the picture is [Inkplate 5 Rev. 2 Case and Stand](https://www.printables.com/model/1204054-inkplate-5-rev-2-case-and-stand).
+
 Copy `credentials_template.h` to `credentials.h` and modify before use.
 
 Fill in:
